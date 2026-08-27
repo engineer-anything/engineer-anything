@@ -6,6 +6,8 @@ async function scan(url, opts = {}) {
   const targetId = await openTab(cdp, url);
   try {
     const raw = rea.exec('inspect-web-page', [cdp, targetId, '--include-accessibility-text']);
+    const bundleRaw = rea.exec("analyze-web-bundle", [cdp, targetId]);
+    const bundle = rea.parse(bundleRaw);
     return { url, evidence: { inspect: rea.parse(raw) } };
   } finally {
     await closeTab(cdp, targetId);
