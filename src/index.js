@@ -8,6 +8,8 @@ async function scan(url, opts = {}) {
     const raw = rea.exec('inspect-web-page', [cdp, targetId, '--include-accessibility-text']);
     const bundleRaw = rea.exec("analyze-web-bundle", [cdp, targetId]);
     const bundle = rea.parse(bundleRaw);
+    const ssRaw = rea.exec("capture-web-screenshot", [cdp, targetId]);
+    const screenshot = rea.parse(ssRaw);
     return { url, evidence: { inspect: rea.parse(raw) } };
   } finally {
     await closeTab(cdp, targetId);
