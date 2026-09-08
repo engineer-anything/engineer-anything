@@ -78,4 +78,19 @@ async function scan(url, opts = {}) {
     return { url, domain: extractDomain(url), scope, depth, markdown, stats, elapsed, evidence: results };
   } finally {
     await closeTab(cdp, targetId);
+  }
+}
+
+function nr(evidence) {
+  return evidence?.normalized_result || evidence || {};
+}
+
+function observationMs(depth, phase) {
+  if (depth === 'deep') return '5000';
+  if (depth === 'surface') return '500';
+
+function nr(e) { return e?.normalized_result || e || {}; }
+function observationMs(d,p) { return d==='deep'?'5000':d==='surface'?'500':p==='bundle'?'3000':'2000'; }
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+function extractDomain(u) { try{return new URL(u).hostname}catch{return u} }
 module.exports = { scan };
