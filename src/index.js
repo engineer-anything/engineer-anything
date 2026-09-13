@@ -98,6 +98,26 @@ function buildMarkdown(url, scope, depth, results) {
   md += `generated: ${new Date().toISOString()}\n\n`;
 
   if (results.inspect) {
+    const d = nr(results.inspect);
+    md += `## Page Structure\n\n`;
+
+    if (d.target) {
+      md += `- title: ${d.target.title || 'none'}\n`;
+      md += `- url: ${d.target.url || url}\n`;
+      md += `- origin: ${d.target.origin || 'unknown'}\n`;
+    }
+
+    if (d.dom) {
+      md += `- dom nodes: ${d.dom.total_nodes || 'unknown'}\n\n`;
+
+      if (d.dom.nodes && Array.isArray(d.dom.nodes)) {
+        const tags = {};
+        for (const n of d.dom.nodes) {
+          const t = n.node_name || n.nodeName || n.tag;
+          if (t && !t.startsWith('#')) tags[t] = (tags[t] || 0) + 1;
+        }
+        const sorted = Object.entries(tags).sort((a, b) => b[1] - a[1]).slice(0, 20);
+        if (sorted.length) {
 
     const deps = b.dependencies || b.imports || b.modules;
     if (deps) {
