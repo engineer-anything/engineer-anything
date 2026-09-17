@@ -118,6 +118,26 @@ function buildMarkdown(url, scope, depth, results) {
         }
         const sorted = Object.entries(tags).sort((a, b) => b[1] - a[1]).slice(0, 20);
         if (sorted.length) {
+          md += `### dom tag distribution\n\n`;
+          for (const [tag, count] of sorted) md += `- \`${tag}\`: ${count}\n`;
+          md += `\n`;
+        }
+      }
+    }
+
+    if (d.frames?.length) {
+      md += `### frames (${d.frames.length})\n\n`;
+      for (const f of d.frames.slice(0, 10)) md += `- ${f.url || f.name || 'frame'}\n`;
+      md += `\n`;
+    }
+
+    if (d.scripts?.items?.length) {
+      md += `### scripts (${d.scripts.total || d.scripts.items.length})\n\n`;
+      for (const s of d.scripts.items.slice(0, 20)) md += `- ${s.url || 'inline'} (${fmtSize(s.length || s.size)})\n`;
+      md += `\n`;
+    }
+
+    if (d.network?.requests?.length) {
 
     const deps = b.dependencies || b.imports || b.modules;
     if (deps) {
