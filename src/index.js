@@ -138,6 +138,26 @@ function buildMarkdown(url, scope, depth, results) {
     }
 
     if (d.network?.requests?.length) {
+      md += `### network requests (${d.network.requests.length})\n\n`;
+      for (const r of d.network.requests.slice(0, 30))
+        md += `- ${r.method || 'GET'} ${r.url || r.request_url || '?'} > ${r.status || r.response_status || '?'}\n`;
+      md += `\n`;
+    }
+
+    if (d.accessibility?.text_capture?.status === 'included') {
+      const parts = [];
+      for (const n of (d.accessibility?.nodes || [])) {
+        const name = n.name?.value || n.name;
+        if (name && typeof name === 'string' && name.trim().length > 1) parts.push(name.trim());
+      }
+      if (parts.length) {
+        md += `### page text (accessibility)\n\n\`\`\`\n${[...new Set(parts)].join('\n').slice(0, 4000)}\n\`\`\`\n\n`;
+      }
+    }
+
+    if (d.storage) {
+      const items = [];
+      if (d.storage.local_storage_keys?.length) items.push(`localStorage: ${d.storage.local_storage_keys.length} keys`);
 
     const deps = b.dependencies || b.imports || b.modules;
     if (deps) {
