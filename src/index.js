@@ -158,6 +158,26 @@ function buildMarkdown(url, scope, depth, results) {
     if (d.storage) {
       const items = [];
       if (d.storage.local_storage_keys?.length) items.push(`localStorage: ${d.storage.local_storage_keys.length} keys`);
+      if (d.storage.session_storage_keys?.length) items.push(`sessionStorage: ${d.storage.session_storage_keys.length} keys`);
+      if (d.storage.indexed_db_names?.length) items.push(`indexedDB: ${d.storage.indexed_db_names.join(', ')}`);
+      if (d.storage.cache_names?.length) items.push(`caches: ${d.storage.cache_names.join(', ')}`);
+      if (items.length) {
+        md += `### storage\n\n`;
+        for (const i of items) md += `- ${i}\n`;
+        md += `\n`;
+      }
+    }
+
+    if (d.metadata?.dom_urls?.length) {
+      md += `### referenced urls (${d.metadata.dom_urls.length})\n\n`;
+      for (const u of d.metadata.dom_urls.slice(0, 30)) {
+        if (typeof u === 'string') md += `- ${u}\n`;
+        else if (u?.url) md += `- ${u.url}\n`;
+      }
+      md += `\n`;
+    }
+  }
+
 
     const deps = b.dependencies || b.imports || b.modules;
     if (deps) {
