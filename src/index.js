@@ -178,6 +178,26 @@ function buildMarkdown(url, scope, depth, results) {
     }
   }
 
+  if (results.bundle) {
+    const b = nr(results.bundle);
+    md += `## Bundle Analysis\n\n`;
+
+    const scripts = b.scripts?.items || (Array.isArray(b.scripts) ? b.scripts : []);
+    if (scripts.length) {
+      md += `scripts: ${scripts.length}\n\n`;
+      for (const s of scripts.slice(0, 25)) md += `- ${s.url || s.source_url || 'inline'} (${fmtSize(s.length || s.size || s.byte_count)})\n`;
+      md += `\n`;
+    }
+
+    const eps = b.api_endpoints || b.endpoints;
+    if (eps && Array.isArray(eps) && eps.length) {
+      md += `### api endpoints (${eps.length})\n\n`;
+      for (const ep of eps.slice(0, 60)) {
+        if (typeof ep === 'string') md += `- ${ep}\n`;
+        else md += `- ${ep.method || '?'} ${ep.path || ep.url || JSON.stringify(ep)}\n`;
+      }
+      md += `\n`;
+    }
 
     const deps = b.dependencies || b.imports || b.modules;
     if (deps) {
