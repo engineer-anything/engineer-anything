@@ -208,6 +208,16 @@ function buildMarkdown(url, scope, depth, results) {
         md += `\n`;
       }
     }
+
+    const deps = b.dependencies || b.imports || b.modules;
+    if (deps) {
+      const list = Array.isArray(deps) ? deps : Object.keys(deps);
+      if (list.length) {
+        md += `### dependencies (${list.length})\n\n`;
+        for (const d of list.slice(0, 50)) md += `- ${typeof d === 'string' ? d : d.name || JSON.stringify(d)}\n`;
+        md += `\n`;
+      }
+    }
   }
 
   if (results.screenshot) {
