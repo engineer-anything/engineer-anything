@@ -28,6 +28,43 @@ if (!url || args.includes('--help') || args.includes('-h')) {
 `);
   process.exit(url ? 0 : 1);
 }
-const url = process.argv[2];
-if (!url) { console.log("usage: node src/cli.js <url>"); process.exit(1); }
-scan(url).then(r => console.log(r.markdown)).catch(e => { console.error(e.message); process.exit(1); });
+
+const flag = (name, fallback) => {
+  const i = args.indexOf(name);
+  return i !== -1 && args[i + 1] ? args[i + 1] : fallback;
+};
+
+const scope = flag('--scope', 'full');
+const depth = flag('--depth', 'standard');
+const cdp = flag('--cdp', 'http://127.0.0.1:9222');
+const outFile = flag('--out', null);
+const jsonMode = args.includes('--json');
+const quiet = args.includes('--quiet');
+
+async function main() {
+  if (!quiet) {
+    process.stderr.write(`[ea] scanning ${url}\n`);
+    process.stderr.write(`[ea] scope=${scope} depth=${depth}\n`);
+  }
+
+  const result = await scan(url, {
+      elapsed: result.elapsed,
+      markdown: result.markdown,
+    }, null, 2));
+  } else if (outFile) {
+    require('fs').writeFileSync(outFile, result.markdown);
+    if (!quiet) process.stderr.write(`[ea] wrote ${outFile}\n`);
+  } else {
+    console.log(result.markdown);
+  }
+
+  if (!quiet) {
+    const summary = result.stats.map(s => `${s.value} ${s.label}`).join(', ');
+    process.stderr.write(`[ea] done in ${result.elapsed}s (${summary})\n`);
+  }
+}
+
+main().catch(e => {
+  process.stderr.write(`[ea] error: ${e.message}\n`);
+  process.exit(1);
+});
