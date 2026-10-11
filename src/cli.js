@@ -48,6 +48,15 @@ async function main() {
   }
 
   const result = await scan(url, {
+    scope, depth, cdp,
+    onStep: quiet ? null : step => process.stderr.write(`[ea] ${step}\n`),
+  });
+
+  if (jsonMode) {
+    console.log(JSON.stringify({
+      url: result.url,
+      domain: result.domain,
+      stats: result.stats,
       elapsed: result.elapsed,
       markdown: result.markdown,
     }, null, 2));
