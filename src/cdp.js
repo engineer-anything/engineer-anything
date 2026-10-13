@@ -11,6 +11,7 @@ function cdpRequest(endpoint, method, path) {
       });
     });
     req.on('error', reject);
+    req.setTimeout(15000, () => { req.destroy(); reject(new Error('cdp timeout')); });
     req.end();
   });
 }
@@ -25,4 +26,8 @@ async function closeTab(endpoint, targetId) {
   try { await cdpRequest(endpoint, 'GET', `/json/close/${targetId}`); } catch {}
 }
 
-module.exports = { openTab, closeTab };
+async function listTargets(endpoint) {
+  return cdpRequest(endpoint, 'GET', '/json/list');
+}
+
+module.exports = { cdpRequest, openTab, closeTab, listTargets };
