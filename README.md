@@ -58,3 +58,33 @@ node src/cli.js https://example.com --cdp http://localhost:9222
 | `--cdp` | `http://127.0.0.1:9222` | chrome devtools endpoint |
 | `--out` | stdout | write to file |
 | `--json` | - | raw json output |
+| `--quiet` | - | no progress logs |
+
+### scopes
+
+| scope | what gets scanned |
+|-------|-------------------|
+| `full` | dom + bundles + screenshot + everything |
+| `api` | dom + bundles (focused on endpoints) |
+| `ui` | dom + screenshot |
+| `bundle` | javascript bundles only |
+
+### depth
+
+| depth | behavior |
+|-------|----------|
+| `surface` | quick pass, 500ms observation |
+| `standard` | 2-3s observation per phase |
+| `deep` | 5s observation, more data |
+
+## as a library
+
+```javascript
+const { scan } = require('./src/index');
+
+const result = await scan('https://stripe.com', {
+  scope: 'full',
+  depth: 'standard',
+  cdp: 'http://127.0.0.1:9222',
+  onStep: step => console.log(step),
+});
