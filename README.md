@@ -88,3 +88,23 @@ const result = await scan('https://stripe.com', {
   cdp: 'http://127.0.0.1:9222',
   onStep: step => console.log(step),
 });
+
+result.markdown   // full reconstruction plan
+result.stats      // [{ label: 'nodes', value: 3595 }, ...]
+result.elapsed    // '24.9'
+result.evidence   // raw rea evidence objects
+result.domain     // 'stripe.com'
+```
+
+## how it works
+
+1. opens a fresh chrome tab via CDP
+2. navigates to the target url and waits for load
+3. runs `rea inspect-web-page` for DOM and accessibility data
+4. runs `rea analyze-web-bundle` for script and dependency analysis
+5. runs `rea capture-web-screenshot` for visual capture
+6. builds a structured markdown reconstruction plan
+7. closes the tab
+
+all analysis is passive. nothing gets executed or modified on the target.
+
