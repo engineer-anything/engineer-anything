@@ -108,3 +108,23 @@ result.domain     // 'stripe.com'
 
 all analysis is passive. nothing gets executed or modified on the target.
 
+## output
+
+the markdown plan includes:
+
+- page metadata (title, origin, url)
+- dom tag distribution
+- frame listing
+- script inventory with file sizes
+- network requests
+- accessibility text content
+- storage keys
+- referenced urls
+- raw evidence json
+
+## requirements
+
+- node 18+
+- chrome or chromium with `--remote-debugging-port=9222`
+- [rea](https://github.com/morluto/rea) (`npm i -g rea-agents`)
+
