@@ -128,3 +128,11 @@ the markdown plan includes:
 - chrome or chromium with `--remote-debugging-port=9222`
 - [rea](https://github.com/morluto/rea) (`npm i -g rea-agents`)
 
+## built with
+
+- [rea](https://github.com/morluto/rea) for CDP-based web analysis
+- chrome devtools protocol
+
+## license
+
+MIT
