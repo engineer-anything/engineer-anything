@@ -258,3 +258,4 @@ function delay(ms) {
 }
 
 module.exports = { scan };
+
