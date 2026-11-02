@@ -1,1 +1,22 @@
-{"name":"engineer-anything","version":"0.1.0","private":true,"main":"src/index.js","license":"MIT","dependencies":{"rea-agents":"^6.0.0"},"engines":{"node":">=18"}}
+{
+  "name": "engineer-anything",
+  "version": "1.2.0",
+  "private": true,
+  "description": "reverse engineer any web application from the command line",
+  "main": "src/index.js",
+  "scripts": {
+    "scan": "node src/cli.js"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/engineer-anything/engineer-anything"
+  },
+  "homepage": "https://enganything.com",
+  "dependencies": {
+    "rea-agents": "^6.8.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
